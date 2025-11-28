@@ -1,20 +1,20 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { TopicProvider } from './src/context/TopicContext';
+import { QuizProvider } from './src/context/QuizContext';
+import AppNavigator from './src/navigation/AppNavigator';
+import { theme } from './src/styles/theme';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <TopicProvider>
+        <QuizProvider>
+          <AppNavigator />
+          <StatusBar style="dark" backgroundColor={theme.colors.surface} />
+        </QuizProvider>
+      </TopicProvider>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
