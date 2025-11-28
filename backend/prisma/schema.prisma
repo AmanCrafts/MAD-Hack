@@ -8,8 +8,174 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
+// ---------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
 }
+
+enum TopicStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ---------------------------------------------------------
+// MODELS
+// ---------------------------------------------------------
+
+model User {
+  id               String          @id @default(uuid())
+  name             String?
+  email            String          @unique
+  password         String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  // Relations
+  progress         TopicProgress[]
+  bookmarks        Bookmark[]
+  streaks          Streak[]
+  recentActivities RecentActivity[]
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  topics      Topic[]
+}
+
+model Topic {
+  id                String      @id @default(uuid())
+  title             String
+  shortDescription  String
+  contentBody       String      @db.LongText
+  estimatedMinutes  Int
+  difficulty        Difficulty
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  // Relations
+  categoryId        String
+  category          Category    @relation(fields: [categoryId], references: [id])
+  quizzes           Quiz[]
+  progresses        TopicProgress[]
+  bookmarks         Bookmark[]
+}
+
+// ---------------------------------------------------------
+// QUIZ MODELS
+// ---------------------------------------------------------
+
+model Quiz {
+  id        String    @id @default(uuid())
+  question  String
+
+  topicId   String
+  topic     Topic     @relation(fields: [topicId], references: [id])
+
+  options   QuizOption[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model QuizOption {
+  id         String   @id @default(uuid())
+  text       String
+  isCorrect  Boolean  @default(false)
+
+  quizId     String
+  quiz       Quiz     @relation(fields: [quizId], references: [id])
+}
+
+// ---------------------------------------------------------
+// USER PROGRESS + LEARNING BEHAVIOR
+// ---------------------------------------------------------
+
+model TopicProgress {
+  id          String       @id @default(uuid())
+  status      TopicStatus  @default(NOT_STARTED)
+
+  // For "last accessed topic", etc.
+  lastAccessed DateTime?  
+  completedAt  DateTime?
+
+  // Learning time tracking
+  timeSpentSec Int         @default(0)
+
+  // Relations
+  userId       String
+  topicId      String
+
+  user         User        @relation(fields: [userId], references: [id])
+  topic        Topic       @relation(fields: [topicId], references: [id])
+
+  @@unique([userId, topicId])
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  topicId   String
+
+  user      User     @relation(fields: [userId], references: [id])
+  topic     Topic    @relation(fields: [topicId], references: [id])
+
+  @@unique([userId, topicId])
+}
+
+model Streak {
+  id        String   @id @default(uuid())
+  date      DateTime // one record per day when user completed a topic
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+// ---------------------------------------------------------
+// USER ACTIVITY LOGGING
+// ---------------------------------------------------------
+
+model RecentActivity {
+  id           String    @id @default(uuid())
+  topicId      String
+  userId       String
+  action       String    // e.g., "COMPLETED", "STARTED", "VIEWED"
+  createdAt    DateTime  @default(now())
+
+  topic        Topic     @relation(fields: [topicId], references: [id])
+  user         User      @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([topicId])
+}
+
+// ---------------------------------------------------------
+// SEARCH INDEXES
+// ---------------------------------------------------------
+
+// For keyword search: title + shortDescription
+model TopicSearchIndex {
+  id          String   @id @default(uuid())
+  topicId     String   @unique
+  title       String
+  description String   @db.LongText
+
+  topic       Topic    @relation(fields: [topicId], references: [id])
+}
+
