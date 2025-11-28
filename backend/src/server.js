@@ -8,13 +8,10 @@ const PORT = ENV.PORT || 3000;
 
 app.use(express.json());
 
-// Connect to Database
 connectDB();
 
-// Routes
 app.use('/api/topics', topicRoutes);
 
-// Health check
 app.get('/', (req, res) => {
     res.send('API is running');
 });

@@ -22,7 +22,7 @@ const topicSchema = new mongoose.Schema({
         default: 'Easy'
     },
     estimatedReadTime: {
-        type: Number, // in minutes
+        type: Number,  
         required: true
     },
     contentBody: {
@@ -30,7 +30,7 @@ const topicSchema = new mongoose.Schema({
         required: true
     }
 }, {
-    timestamps: true // adds createdAt and updatedAt
+    timestamps: true  
 });
 
 const Topic = mongoose.model('Topic', topicSchema);
