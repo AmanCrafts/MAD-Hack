@@ -11,8 +11,14 @@ app.use(express.json());
 // Connect to Database
 connectDB();
 
+// Routes
 app.use('/api/topics', topicRoutes);
+
+// Health check
+app.get('/', (req, res) => {
+    res.send('API is running');
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-})
+});
