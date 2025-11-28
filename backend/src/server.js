@@ -2,12 +2,17 @@ import express from 'express';
 import { ENV } from './config/env.js';
 
 
+import topicRoutes from './routes/topic.route.js';
+
 const app = express();
 const PORT = ENV.PORT || 3000;
 
 
 app.use(express.json());
-app.get('/', (req,res) => {
+
+app.use('/api/topics', topicRoutes);
+
+app.get('/', (req, res) => {
     res.send('API is running');
 })
 
