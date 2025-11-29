@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTopics } from '../../context/TopicContext';
 import TopicCard from '../../components/TopicCard';
 import { theme } from '../../styles/theme';

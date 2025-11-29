@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useQuiz } from '../../context/QuizContext';
 import { useTopics } from '../../context/TopicContext';
 import QuizOption from '../../components/QuizOption';

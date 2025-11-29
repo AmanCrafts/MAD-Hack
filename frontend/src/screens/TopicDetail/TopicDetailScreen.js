@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTopics } from '../../context/TopicContext';
 import CategoryTag from '../../components/CategoryTag';
 import { theme } from '../../styles/theme';
@@ -65,7 +66,7 @@ const TopicDetailScreen = ({ route, navigation }) => {
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{topic.title}</Text>
-          <TouchableOpacity onPress={handleToggleBookmark} style={styles.bookmarkButton}>
+          <TouchableOpacity onPress={handleBookmarkPress} style={styles.bookmarkButton}>
             <Ionicons
               name={isBookmarked ? "bookmark" : "bookmark-outline"}
               size={28}

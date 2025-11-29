@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTopics } from '../../context/TopicContext';
 import ProgressBar from '../../components/ProgressBar';
 import CategoryTag from '../../components/CategoryTag';

@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase.js';
-import prisma from '../config/db.js';
+import { prisma } from '../config/db.js';
 
 /**
  * Sign up a new user
@@ -35,9 +35,14 @@ export const signup = async (req, res) => {
             });
         }
 
-        // Create user in our database
-        const user = await prisma.user.create({
-            data: {
+        // Create or update user in our database (using upsert)
+        const user = await prisma.user.upsert({
+            where: { id: authData.user.id },
+            update: {
+                email,
+                name,
+            },
+            create: {
                 id: authData.user.id, // Use Supabase user ID
                 email,
                 name,
@@ -95,8 +100,8 @@ export const signin = async (req, res) => {
             });
         }
 
-        // Get user from database
-        const user = await prisma.user.findUnique({
+        // Get or create user in database
+        let user = await prisma.user.findUnique({
             where: { id: data.user.id },
             select: {
                 id: true,
@@ -107,6 +112,25 @@ export const signin = async (req, res) => {
                 lastCompletedDate: true
             }
         });
+
+        // If user doesn't exist in our database, create them
+        if (!user) {
+            user = await prisma.user.create({
+                data: {
+                    id: data.user.id,
+                    email: data.user.email,
+                    name: data.user.user_metadata?.name || data.user.email.split('@')[0],
+                },
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    currentStreak: true,
+                    totalTopicsCompleted: true,
+                    lastCompletedDate: true
+                }
+            });
+        }
 
         return res.status(200).json({
             success: true,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTopics } from '../../context/TopicContext';
 import TopicCard from '../../components/TopicCard';
 import CategoryTag from '../../components/CategoryTag';

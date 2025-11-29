@@ -16,7 +16,7 @@ export const searchTopics = async (req, res) => {
                 OR: [
                     { title: { contains: q, mode: 'insensitive' } },
                     { description: { contains: q, mode: 'insensitive' } },
-                    { category: { name: { contains: q, mode: 'insensitive' } } }
+                    { category: { is: { name: { contains: q, mode: 'insensitive' } } } }
                 ]
             },
             include: {
