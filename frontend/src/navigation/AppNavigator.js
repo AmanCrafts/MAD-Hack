@@ -1,5 +1,9 @@
 import React, { useContext } from 'react';
+<<<<<<< HEAD
 import { Text, TouchableOpacity, Alert } from 'react-native';
+=======
+import { TouchableOpacity, Alert } from 'react-native';
+>>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -36,6 +40,7 @@ const TabIcon = ({ name, color, size = 24 }) => (
 
 /* ---------------------- TAB NAVIGATOR ---------------------- */
 const TabNavigator = () => {
+<<<<<<< HEAD
   const { signOut } = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -43,6 +48,23 @@ const TabNavigator = () => {
       { text: 'Cancel', style: 'cancel' },
       { text: 'Logout', style: 'destructive', onPress: signOut },
     ]);
+=======
+  const { signOut, user } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Logout', 
+          style: 'destructive',
+          onPress: () => signOut()
+        }
+      ]
+    );
+>>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
   };
 
   return (
@@ -96,6 +118,7 @@ const TabNavigator = () => {
 
       {/* DASHBOARD TAB */}
       <Tab.Screen
+<<<<<<< HEAD
         name="Dashboard"
         component={DashboardScreen}
         options={{
@@ -130,6 +153,8 @@ const TabNavigator = () => {
 
       {/* BOOKMARKS TAB */}
       <Tab.Screen
+=======
+>>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
         name="Bookmarks"
         component={BookmarksScreen}
         options={{
@@ -150,6 +175,22 @@ const TabNavigator = () => {
             <TabIcon name="person-outline" color={color} />
           ),
           headerTitle: 'My Profile',
+        }}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          tabBarLabel: 'Progress',
+          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
+          headerRight: () => (
+            <TouchableOpacity 
+              onPress={handleLogout}
+              style={{ marginRight: 15 }}
+            >
+              <Ionicons name="log-out-outline" size={24} color={theme.colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
     </Tab.Navigator>
