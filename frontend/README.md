@@ -183,6 +183,6 @@ Modify `src/styles/theme.js` for colors, fonts, and spacing.
 2. Add to navigation in `src/navigation/AppNavigator.js`
 3. Update context if needed
 
-## 📄 License
+##  License
 
 This project is part of the MAD-Hack hackathon submission.

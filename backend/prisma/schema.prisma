@@ -14,42 +14,119 @@ datasource db {
 }
 
 model User {
-  id                   String         @id // Supabase Auth user ID (UUID)
+  id                   String           @id // Supabase Auth user ID (UUID)
   name                 String
-  email                String         @unique
-  currentStreak        Int            @default(0)
+  email                String           @unique
+  currentStreak        Int              @default(0)
   lastCompletedDate    DateTime?
-  totalTopicsCompleted Int            @default(0)
-  progress             UserProgress[]
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
+  totalTopicsCompleted Int              @default(0)
+  progress             TopicProgress[]
+  bookmarks            Bookmark[]
+  streaks              Streak[]
+  recentActivity       RecentActivity[]
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  topics    Topic[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Topic {
-  id                String         @id @default(uuid())
+  id                String            @id @default(uuid())
   title             String
   description       String
-  category          String
-  difficulty        String         @default("Easy")
+  category          Category          @relation(fields: [categoryId], references: [id])
+  categoryId        String
+  difficulty        String            @default("Easy") // Easy, Medium, Hard
   estimatedReadTime Int
   contentBody       String
-  progress          UserProgress[]
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  quizzes           Quiz[]
+  progresses        TopicProgress[]
+  bookmarks         Bookmark[]
+  recentActivities  RecentActivity[]
+  searchIndex       TopicSearchIndex?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 }
 
-model UserProgress {
-  id           String   @id @default(uuid())
-  user         User     @relation(fields: [userId], references: [id])
+model Quiz {
+  id        String       @id @default(uuid())
+  topic     Topic        @relation(fields: [topicId], references: [id])
+  topicId   String
+  question  String
+  options   QuizOption[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model QuizOption {
+  id        String   @id @default(uuid())
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  quizId    String
+  text      String
+  isCorrect Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TopicProgress {
+  id           String    @id @default(uuid())
+  user         User      @relation(fields: [userId], references: [id])
   userId       String
-  topic        Topic    @relation(fields: [topicId], references: [id])
+  topic        Topic     @relation(fields: [topicId], references: [id])
   topicId      String
-  status       String   @default("not_started")
-  quizScore    Int      @default(0)
-  isBookmarked Boolean  @default(false)
-  lastAccessed DateTime @default(now())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  status       String    @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED
+  quizScore    Int       @default(0)
+  lastAccessed DateTime  @default(now())
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@unique([userId, topicId])
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  topic     Topic    @relation(fields: [topicId], references: [id])
+  topicId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, topicId])
+}
+
+model Streak {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  date      DateTime @default(now()) // Store just the date part if possible, or handle in logic
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+}
+
+model RecentActivity {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  topic     Topic    @relation(fields: [topicId], references: [id])
+  topicId   String
+  action    String   // e.g., "STARTED", "COMPLETED", "VIEWED"
+  createdAt DateTime @default(now())
+}
+
+model TopicSearchIndex {
+  id          String   @id @default(uuid())
+  topic       Topic    @relation(fields: [topicId], references: [id])
+  topicId     String   @unique
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
