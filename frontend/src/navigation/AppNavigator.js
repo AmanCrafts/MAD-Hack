@@ -1,19 +1,20 @@
 import React, { useContext } from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '../styles/theme';
 
-// Auth context (make sure you have AuthContext.js)
+// Auth Context
 import { AuthContext } from '../context/AuthContext';
 
-// Auth screens
+// Auth Screens
 import LoginScreen from '../screens/Auth/LoginScreen';
 import SignupScreen from '../screens/Auth/SignupScreen';
+import SplashScreen from '../screens/Auth/SplashScreen';
 
-// Main screens
+// Main Screens
 import HomeScreen from '../screens/Home/HomeScreen';
 import TopicListScreen from '../screens/Topics/TopicListScreen';
 import TopicDetailScreen from '../screens/TopicDetail/TopicDetailScreen';
@@ -23,18 +24,27 @@ import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import BookmarksScreen from '../screens/Bookmarks/BookmarksScreen';
 import RecommendationsScreen from '../screens/Recommendations/RecommendationsScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
-import SplashScreen from '../screens/Auth/SplashScreen';
+import ProfileScreen from '../screens/Profile/ProfileScreen'; // 👈 Added Profile screen
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-/* ---------------------- TAB NAVIGATOR ---------------------- */
-// Simple tab icon component (using Ionicons)
+/* ---------------------- TAB ICON ---------------------- */
 const TabIcon = ({ name, color, size = 24 }) => (
   <Ionicons name={name} size={size} color={color} />
 );
 
-// Tab Navigator
+/* ---------------------- TAB NAVIGATOR ---------------------- */
 const TabNavigator = () => {
+  const { signOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Logout', style: 'destructive', onPress: signOut },
+    ]);
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -64,6 +74,7 @@ const TabNavigator = () => {
         },
       }}
     >
+      {/* HOME TAB */}
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -72,6 +83,8 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => <TabIcon name="home-outline" color={color} />,
         }}
       />
+
+      {/* TOPICS TAB */}
       <Tab.Screen
         name="Topics"
         component={TopicListScreen}
@@ -80,20 +93,63 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => <TabIcon name="book-outline" color={color} />,
         }}
       />
+
+      {/* DASHBOARD TAB */}
       <Tab.Screen
         name="Dashboard"
         component={DashboardScreen}
         options={{
           tabBarLabel: 'Progress',
-          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="stats-chart-outline" color={color} />
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={{ marginRight: 16, flexDirection: 'row', alignItems: 'center' }}
+            >
+              <Ionicons
+                name="log-out-outline"
+                size={22}
+                color={theme.colors.primary}
+              />
+              <Text
+                style={{
+                  color: theme.colors.primary,
+                  marginLeft: 4,
+                  fontWeight: '500',
+                  fontSize: 14,
+                }}
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
+          ),
         }}
       />
+
+      {/* BOOKMARKS TAB */}
       <Tab.Screen
         name="Bookmarks"
         component={BookmarksScreen}
         options={{
           tabBarLabel: 'Saved',
-          tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="bookmark-outline" color={color} />
+          ),
+        }}
+      />
+
+      {/* PROFILE TAB */}
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="person-outline" color={color} />
+          ),
+          headerTitle: 'My Profile',
         }}
       />
     </Tab.Navigator>
@@ -185,14 +241,11 @@ const AuthStack = () => (
   </Stack.Navigator>
 );
 
-/* ---------------------- ROOT APP NAVIGATOR ---------------------- */
-// Main Stack Navigator
+/* ---------------------- ROOT NAVIGATOR ---------------------- */
 const AppNavigator = () => {
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) {
-    return <SplashScreen />;
-  }
+  if (loading) return <SplashScreen />;
 
   return (
     <NavigationContainer>
