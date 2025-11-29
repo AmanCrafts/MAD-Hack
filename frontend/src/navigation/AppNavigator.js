@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Text } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -35,6 +35,23 @@ const TabIcon = ({ name, color, size = 24 }) => (
 
 // Tab Navigator
 const TabNavigator = () => {
+  const { signOut, user } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Logout', 
+          style: 'destructive',
+          onPress: () => signOut()
+        }
+      ]
+    );
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -81,19 +98,27 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Progress',
-          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
-        }}
-      />
-      <Tab.Screen
         name="Bookmarks"
         component={BookmarksScreen}
         options={{
           tabBarLabel: 'Saved',
           tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          tabBarLabel: 'Progress',
+          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
+          headerRight: () => (
+            <TouchableOpacity 
+              onPress={handleLogout}
+              style={{ marginRight: 15 }}
+            >
+              <Ionicons name="log-out-outline" size={24} color={theme.colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
     </Tab.Navigator>
