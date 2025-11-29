@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 const TopicCard = ({ topic, status, isBookmarked, onPress, onBookmark }) => {
   const getStatusColor = () => {
@@ -46,12 +47,14 @@ const TopicCard = ({ topic, status, isBookmarked, onPress, onBookmark }) => {
             {topic.title}
           </Text>
           <TouchableOpacity onPress={onBookmark} style={styles.bookmarkButton}>
-            <Text style={[styles.bookmark, { color: isBookmarked ? theme.colors.accent : theme.colors.textSecondary }]}>
-              {isBookmarked ? '★' : '☆'}
-            </Text>
+            <Ionicons
+              name={isBookmarked ? "bookmark" : "bookmark-outline"}
+              size={24}
+              color={isBookmarked ? theme.colors.primary : theme.colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
-        
+
         <Text style={styles.description} numberOfLines={2}>
           {topic.description}
         </Text>
@@ -62,7 +65,7 @@ const TopicCard = ({ topic, status, isBookmarked, onPress, onBookmark }) => {
           <View style={[styles.tag, styles.categoryTag]}>
             <Text style={styles.tagText}>{topic.category}</Text>
           </View>
-          
+
           <View style={[styles.tag, { backgroundColor: getDifficultyColor() }]}>
             <Text style={[styles.tagText, styles.whiteText]}>{topic.difficulty}</Text>
           </View>

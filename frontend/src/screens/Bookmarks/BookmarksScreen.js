@@ -29,10 +29,10 @@ const BookmarksScreen = ({ navigation }) => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyIcon}>⭐</Text>
-      <Text style={styles.emptyTitle}>No Bookmarks Yet</Text>
+      <Ionicons name="bookmark-outline" size={64} color={theme.colors.textSecondary} style={styles.emptyIcon} />
+      <Text style={styles.emptyTitle}>No bookmarks yet</Text>
       <Text style={styles.emptyDescription}>
-        Bookmark topics you want to revisit later by tapping the star icon on any topic card.
+        Save topics you want to review later
       </Text>
     </View>
   );

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,6 +28,12 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 /* ---------------------- TAB NAVIGATOR ---------------------- */
+// Simple tab icon component (using Ionicons)
+const TabIcon = ({ name, color, size = 24 }) => (
+  <Ionicons name={name} size={size} color={color} />
+);
+
+// Tab Navigator
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -62,7 +69,7 @@ const TabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => <TabIcon name="🏠" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="home-outline" color={color} />,
         }}
       />
       <Tab.Screen
@@ -70,7 +77,7 @@ const TabNavigator = () => {
         component={TopicListScreen}
         options={{
           tabBarLabel: 'Topics',
-          tabBarIcon: ({ color }) => <TabIcon name="📚" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="book-outline" color={color} />,
         }}
       />
       <Tab.Screen
@@ -78,7 +85,7 @@ const TabNavigator = () => {
         component={DashboardScreen}
         options={{
           tabBarLabel: 'Progress',
-          tabBarIcon: ({ color }) => <TabIcon name="📊" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
         }}
       />
       <Tab.Screen
@@ -86,7 +93,7 @@ const TabNavigator = () => {
         component={BookmarksScreen}
         options={{
           tabBarLabel: 'Saved',
-          tabBarIcon: ({ color }) => <TabIcon name="⭐" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
         }}
       />
     </Tab.Navigator>
@@ -186,6 +193,7 @@ const AuthStack = () => (
 );
 
 /* ---------------------- ROOT APP NAVIGATOR ---------------------- */
+// Main Stack Navigator
 const AppNavigator = () => {
   const { user, loading } = useContext(AuthContext);
 

@@ -76,20 +76,15 @@ const QuizScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-          <Text style={styles.backText}>✕</Text>
+        <TouchableOpacity onPress={handleBackPress} style={styles.closeButton}>
+          <Ionicons name="close-outline" size={28} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.topicTitle}>{currentTopic.title}</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      {/* Progress */}
-      <View style={styles.progressSection}>
-        <ProgressBar
-          current={progress.current}
-          total={progress.total}
-          color={theme.colors.primary}
-        />
+        <View style={styles.progressContainer}>
+          <View style={[styles.progressBar, { width: `${(currentQuestionIndex / questions.length) * 100}%` }]} />
+        </View>
+        <Text style={styles.questionCount}>
+          {currentQuestionIndex + 1}/{questions.length}
+        </Text>
       </View>
 
       {/* Question */}
