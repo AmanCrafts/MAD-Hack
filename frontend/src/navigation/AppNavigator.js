@@ -1,16 +1,12 @@
 import React, { useContext } from 'react';
-<<<<<<< HEAD
 import { Text, TouchableOpacity, Alert } from 'react-native';
-=======
-import { TouchableOpacity, Alert } from 'react-native';
->>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '../styles/theme';
 
-// Auth Context
+// Context
 import { AuthContext } from '../context/AuthContext';
 
 // Auth Screens
@@ -28,43 +24,27 @@ import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import BookmarksScreen from '../screens/Bookmarks/BookmarksScreen';
 import RecommendationsScreen from '../screens/Recommendations/RecommendationsScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
-import ProfileScreen from '../screens/Profile/ProfileScreen'; // 👈 Added Profile screen
+import ProfileScreen from '../screens/Profile/ProfileScreen'; // 👈 Profile screen
 
+// Create Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-/* ---------------------- TAB ICON ---------------------- */
+/* ---------------------- TAB ICON COMPONENT ---------------------- */
 const TabIcon = ({ name, color, size = 24 }) => (
   <Ionicons name={name} size={size} color={color} />
 );
 
 /* ---------------------- TAB NAVIGATOR ---------------------- */
 const TabNavigator = () => {
-<<<<<<< HEAD
   const { signOut } = useContext(AuthContext);
 
+  // Handle logout confirmation
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Logout', style: 'destructive', onPress: signOut },
     ]);
-=======
-  const { signOut, user } = useContext(AuthContext);
-
-  const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Logout', 
-          style: 'destructive',
-          onPress: () => signOut()
-        }
-      ]
-    );
->>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
   };
 
   return (
@@ -128,7 +108,11 @@ const TabNavigator = () => {
           headerRight: () => (
             <TouchableOpacity
               onPress={handleLogout}
-              style={{ marginRight: 16, flexDirection: 'row', alignItems: 'center' }}
+              style={{
+                marginRight: 16,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
             >
               <Ionicons
                 name="log-out-outline"
@@ -174,27 +158,11 @@ const TabNavigator = () => {
           headerTitle: 'My Profile',
         }}
       />
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Progress',
-          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
-          headerRight: () => (
-            <TouchableOpacity 
-              onPress={handleLogout}
-              style={{ marginRight: 15 }}
-            >
-              <Ionicons name="log-out-outline" size={24} color={theme.colors.primary} />
-            </TouchableOpacity>
-          ),
-        }}
-      />
     </Tab.Navigator>
   );
 };
 
-/* ---------------------- MAIN APP STACK ---------------------- */
+/* ---------------------- MAIN STACK (INSIDE AUTH) ---------------------- */
 const MainStack = () => (
   <Stack.Navigator
     screenOptions={{
@@ -283,10 +251,14 @@ const AuthStack = () => (
 const AppNavigator = () => {
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) return <SplashScreen />;
+  if (loading) {
+    // Show splash while checking if user is logged in
+    return <SplashScreen />;
+  }
 
   return (
     <NavigationContainer>
+      {/* If user is logged in → show main app, else → show auth screens */}
       {user ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
