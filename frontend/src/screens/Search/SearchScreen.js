@@ -64,14 +64,10 @@ const SearchScreen = ({ navigation }) => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyIcon}>🔍</Text>
-      <Text style={styles.emptyTitle}>No Topics Found</Text>
-      <Text style={styles.emptyDescription}>
-        Try adjusting your search terms or filters to find what you're looking for.
+      <Ionicons name="search-outline" size={64} color={theme.colors.textSecondary} style={styles.emptyIcon} />
+      <Text style={styles.emptyText}>
+        {searchQuery ? 'No topics found' : 'Search for topics'}
       </Text>
-      <TouchableOpacity style={styles.clearButton} onPress={clearFilters}>
-        <Text style={styles.clearButtonText}>Clear All Filters</Text>
-      </TouchableOpacity>
     </View>
   );
 
@@ -79,7 +75,7 @@ const SearchScreen = ({ navigation }) => {
     <View style={styles.header}>
       {/* Search Input */}
       <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <Ionicons name="search-outline" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search topics..."
@@ -88,10 +84,11 @@ const SearchScreen = ({ navigation }) => {
           onChangeText={setSearchQuery}
           autoCapitalize="none"
           autoCorrect={false}
+          autoFocus
         />
         {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearIcon}>
-            <Text style={styles.clearIconText}>✕</Text>
+          <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearSearchButton}>
+            <Ionicons name="close-circle" size={18} color={theme.colors.textSecondary} />
           </TouchableOpacity>
         )}
       </View>

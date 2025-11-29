@@ -43,7 +43,7 @@ const TopicListScreen = ({ navigation }) => {
         style={styles.searchButton}
         onPress={() => navigation.navigate('Search')}
       >
-        <Text style={styles.searchIcon}>🔍</Text>
+        <Ionicons name="search-outline" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
         <Text style={styles.searchText}>Search topics...</Text>
       </TouchableOpacity>
 

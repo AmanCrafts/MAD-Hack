@@ -4,6 +4,7 @@ import { useTopics } from '../../context/TopicContext';
 import { useRecommendations } from '../../hooks/useRecommendations';
 import TopicCard from '../../components/TopicCard';
 import { theme } from '../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
   const { topics, topicStatus, toggleBookmark, bookmarks, streak, getCompletedTopicsCount } = useTopics();
@@ -24,7 +25,7 @@ const HomeScreen = ({ navigation }) => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Welcome Section */}
       <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeTitle}>Welcome to SkillBites! 🎯</Text>
+        <Text style={styles.welcomeTitle}>Welcome to SkillBites!</Text>
         <Text style={styles.welcomeSubtitle}>
           Learn something new in just a few minutes
         </Text>
@@ -55,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
-          
+
           <TopicCard
             topic={nextTopic}
             status={topicStatus[nextTopic.id] || 'not_started'}
@@ -74,8 +75,8 @@ const HomeScreen = ({ navigation }) => {
             style={styles.actionCard}
             onPress={() => navigation.navigate('Topics')}
           >
-            <Text style={styles.actionIcon}>📚</Text>
-            <Text style={styles.actionTitle}>Browse Topics</Text>
+            <Ionicons name="book-outline" size={24} color={theme.colors.primary} style={styles.actionIcon} />
+            <Text style={styles.actionTitle}>Topics</Text>
             <Text style={styles.actionSubtitle}>Explore all available topics</Text>
           </TouchableOpacity>
 
@@ -83,7 +84,7 @@ const HomeScreen = ({ navigation }) => {
             style={styles.actionCard}
             onPress={() => navigation.navigate('Search')}
           >
-            <Text style={styles.actionIcon}>🔍</Text>
+            <Ionicons name="search-outline" size={24} color={theme.colors.primary} style={styles.actionIcon} />
             <Text style={styles.actionTitle}>Search</Text>
             <Text style={styles.actionSubtitle}>Find specific topics</Text>
           </TouchableOpacity>
@@ -92,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
             style={styles.actionCard}
             onPress={() => navigation.navigate('Dashboard')}
           >
-            <Text style={styles.actionIcon}>📊</Text>
+            <Ionicons name="stats-chart-outline" size={24} color={theme.colors.primary} style={styles.actionIcon} />
             <Text style={styles.actionTitle}>Progress</Text>
             <Text style={styles.actionSubtitle}>View your learning stats</Text>
           </TouchableOpacity>
@@ -101,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
             style={styles.actionCard}
             onPress={() => navigation.navigate('Bookmarks')}
           >
-            <Text style={styles.actionIcon}>⭐</Text>
+            <Ionicons name="bookmark-outline" size={24} color={theme.colors.primary} style={styles.actionIcon} />
             <Text style={styles.actionTitle}>Bookmarks</Text>
             <Text style={styles.actionSubtitle}>Your saved topics</Text>
           </TouchableOpacity>

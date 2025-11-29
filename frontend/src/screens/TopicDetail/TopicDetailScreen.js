@@ -7,7 +7,7 @@ import { theme } from '../../styles/theme';
 const TopicDetailScreen = ({ route, navigation }) => {
   const { topicId } = route.params;
   const { getTopicById, topicStatus, updateTopicStatus, toggleBookmark, bookmarks } = useTopics();
-  
+
   const topic = getTopicById(topicId);
   const status = topicStatus[topicId] || 'not_started';
   const isBookmarked = bookmarks.includes(topicId);
@@ -65,15 +65,17 @@ const TopicDetailScreen = ({ route, navigation }) => {
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{topic.title}</Text>
-          <TouchableOpacity onPress={handleBookmarkPress} style={styles.bookmarkButton}>
-            <Text style={[styles.bookmark, { color: isBookmarked ? theme.colors.accent : theme.colors.textSecondary }]}>
-              {isBookmarked ? '★' : '☆'}
-            </Text>
+          <TouchableOpacity onPress={handleToggleBookmark} style={styles.bookmarkButton}>
+            <Ionicons
+              name={isBookmarked ? "bookmark" : "bookmark-outline"}
+              size={28}
+              color={isBookmarked ? theme.colors.primary : theme.colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
-        
+
         <Text style={styles.description}>{topic.description}</Text>
-        
+
         {/* Meta Information */}
         <View style={styles.metaRow}>
           <CategoryTag category={topic.category} variant="small" />
@@ -81,7 +83,8 @@ const TopicDetailScreen = ({ route, navigation }) => {
             <Text style={styles.difficultyText}>{topic.difficulty}</Text>
           </View>
           <View style={styles.timeTag}>
-            <Text style={styles.timeText}>⏱️ {topic.estimatedTime} min</Text>
+            <Ionicons name="time-outline" size={16} color={theme.colors.textSecondary} style={{ marginRight: 4 }} />
+            <Text style={styles.timeText}>{topic.estimatedTime} min</Text>
           </View>
         </View>
 

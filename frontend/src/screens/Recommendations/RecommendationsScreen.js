@@ -4,6 +4,7 @@ import { useTopics } from '../../context/TopicContext';
 import { useRecommendations } from '../../hooks/useRecommendations';
 import TopicCard from '../../components/TopicCard';
 import { theme } from '../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 const RecommendationsScreen = ({ navigation }) => {
   const { topicStatus, toggleBookmark, bookmarks, getCompletedTopicsCount } = useTopics();
@@ -31,7 +32,7 @@ const RecommendationsScreen = ({ navigation }) => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyIcon}>🎯</Text>
+      <Ionicons name="bulb-outline" size={64} color={theme.colors.textSecondary} style={styles.emptyIcon} />
       <Text style={styles.emptyTitle}>
         {completedCount === 0 ? 'Start Learning!' : 'All Caught Up!'}
       </Text>
@@ -50,7 +51,7 @@ const RecommendationsScreen = ({ navigation }) => {
       <Text style={styles.headerSubtitle}>
         Based on your learning progress and preferences
       </Text>
-      
+
       {completedCount > 0 && (
         <View style={styles.recommendationInfo}>
           <Text style={styles.infoTitle}>How we recommend:</Text>

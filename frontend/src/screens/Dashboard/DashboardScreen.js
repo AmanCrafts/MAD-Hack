@@ -47,27 +47,40 @@ const DashboardScreen = () => {
     return total > 0 ? Math.round((completed / total) * 100) : 0;
   };
 
+  // Placeholder for stats object, as it's introduced in the instruction's replacement
+  // In a real app, these would come from context or calculated data.
+  const stats = {
+    completed: completedCount,
+    streak: streak,
+    totalScore: 1250, // Example value
+    averageScore: 85, // Example value
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Overview Stats */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Overview</Text>
         <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{completedCount}</Text>
+          <View style={styles.statItem}>
+            <Ionicons name="target" size={24} color="#FF6B6B" />
+            <Text style={styles.statValue}>{stats.completed}</Text>
             <Text style={styles.statLabel}>Completed</Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{inProgressCount}</Text>
-            <Text style={styles.statLabel}>In Progress</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{notStartedCount}</Text>
-            <Text style={styles.statLabel}>Not Started</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{streak}</Text>
+          <View style={styles.statItem}>
+            <Ionicons name="flame" size={24} color="#FFD93D" />
+            <Text style={styles.statValue}>{stats.streak}</Text>
             <Text style={styles.statLabel}>Day Streak</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Ionicons name="star" size={24} color="#4D96FF" />
+            <Text style={styles.statValue}>{stats.totalScore}</Text>
+            <Text style={styles.statLabel}>Total Score</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Ionicons name="diamond" size={24} color="#6C63FF" />
+            <Text style={styles.statValue}>{stats.averageScore}%</Text>
+            <Text style={styles.statLabel}>Avg Score</Text>
           </View>
         </View>
       </View>
@@ -170,19 +183,19 @@ const DashboardScreen = () => {
             <Text style={styles.achievementTitle}>First Steps</Text>
             <Text style={styles.achievementDesc}>Complete your first topic</Text>
           </View>
-          
+
           <View style={[styles.achievementCard, streak >= 3 && styles.achievementUnlocked]}>
             <Text style={styles.achievementIcon}>🔥</Text>
             <Text style={styles.achievementTitle}>On Fire</Text>
             <Text style={styles.achievementDesc}>3-day learning streak</Text>
           </View>
-          
+
           <View style={[styles.achievementCard, completedCount >= 5 && styles.achievementUnlocked]}>
             <Text style={styles.achievementIcon}>⭐</Text>
             <Text style={styles.achievementTitle}>Knowledge Seeker</Text>
             <Text style={styles.achievementDesc}>Complete 5 topics</Text>
           </View>
-          
+
           <View style={[styles.achievementCard, streak >= 7 && styles.achievementUnlocked]}>
             <Text style={styles.achievementIcon}>💎</Text>
             <Text style={styles.achievementTitle}>Dedicated</Text>

@@ -40,9 +40,9 @@ const ResultScreen = ({ route, navigation }) => {
   };
 
   const getScoreMessage = () => {
-    if (results.percentage >= 80) return 'Excellent! 🎉';
-    if (results.percentage >= 60) return 'Good job! 👍';
-    return 'Keep practicing! 💪';
+    if (results.percentage >= 80) return 'Excellent!';
+    if (results.percentage >= 60) return 'Good job!';
+    return 'Keep practicing!';
   };
 
   if (!topic || !results) {
@@ -88,7 +88,7 @@ const ResultScreen = ({ route, navigation }) => {
             <Text style={styles.reviewQuestionText}>
               {answer.question.question}
             </Text>
-            
+
             <View style={styles.reviewOptions}>
               {answer.question.options.map((option, optionIndex) => (
                 <QuizOption
@@ -98,11 +98,11 @@ const ResultScreen = ({ route, navigation }) => {
                   isSelected={answer.selectedAnswer === optionIndex}
                   isCorrect={optionIndex === answer.question.correctAnswer}
                   isIncorrect={
-                    answer.selectedAnswer === optionIndex && 
+                    answer.selectedAnswer === optionIndex &&
                     optionIndex !== answer.question.correctAnswer
                   }
                   disabled={true}
-                  onPress={() => {}}
+                  onPress={() => { }}
                 />
               ))}
             </View>
@@ -123,11 +123,11 @@ const ResultScreen = ({ route, navigation }) => {
         <TouchableOpacity style={styles.primaryButton} onPress={handleBackToHome}>
           <Text style={styles.primaryButtonText}>Back to Home</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.secondaryButton} onPress={handleRetakeQuiz}>
           <Text style={styles.secondaryButtonText}>Retake Quiz</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.tertiaryButton} onPress={handleBackToTopic}>
           <Text style={styles.tertiaryButtonText}>Back to Topic</Text>
         </TouchableOpacity>
