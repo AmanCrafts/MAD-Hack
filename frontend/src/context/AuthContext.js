@@ -13,8 +13,8 @@ export const AuthProvider = ({ children }) => {
       const token = await AsyncStorage.getItem('accessToken');
       if (token) {
         try {
-          const res = await api.get('/auth/me');
-          setUser(res.data.user);
+          const res = await api.get('/auth/profile');
+          setUser(res.data.data.user);
         } catch (err) {
           console.log('Auto-login failed:', err.response?.data || err.message);
           await AsyncStorage.removeItem('accessToken');
@@ -29,14 +29,22 @@ export const AuthProvider = ({ children }) => {
     const res = await api.post('/auth/signup', { name, email, password });
     const { session, user } = res.data.data;
     await AsyncStorage.setItem('accessToken', session.access_token);
+    if (session.refresh_token) {
+      await AsyncStorage.setItem('refreshToken', session.refresh_token);
+    }
     setUser(user);
+    return user;
   };
 
   const signIn = async (email, password) => {
     const res = await api.post('/auth/signin', { email, password });
     const { session, user } = res.data.data;
     await AsyncStorage.setItem('accessToken', session.access_token);
+    if (session.refresh_token) {
+      await AsyncStorage.setItem('refreshToken', session.refresh_token);
+    }
     setUser(user);
+    return user;
   };
 
   const signOut = async () => {

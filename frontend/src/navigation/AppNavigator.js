@@ -100,13 +100,6 @@ const TabNavigator = () => {
   );
 };
 
-/* ---------------------- SIMPLE TAB ICON ---------------------- */
-const TabIcon = ({ name, color }) => (
-  <Text style={{ fontSize: 22, opacity: color === theme.colors.primary ? 1 : 0.6 }}>
-    {name}
-  </Text>
-);
-
 /* ---------------------- MAIN APP STACK ---------------------- */
 const MainStack = () => (
   <Stack.Navigator

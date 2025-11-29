@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DIRECT_URL")
 }
 
 model User {
@@ -117,7 +117,7 @@ model RecentActivity {
   userId    String
   topic     Topic    @relation(fields: [topicId], references: [id])
   topicId   String
-  action    String   // e.g., "STARTED", "COMPLETED", "VIEWED"
+  action    String // e.g., "STARTED", "COMPLETED", "VIEWED"
   createdAt DateTime @default(now())
 }
 

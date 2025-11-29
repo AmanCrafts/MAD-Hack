@@ -64,7 +64,7 @@ const DashboardScreen = () => {
         <Text style={styles.sectionTitle}>Overview</Text>
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
-            <Ionicons name="target" size={24} color="#FF6B6B" />
+            <Ionicons name="checkmark-circle" size={24} color="#FF6B6B" />
             <Text style={styles.statValue}>{stats.completed}</Text>
             <Text style={styles.statLabel}>Completed</Text>
           </View>
