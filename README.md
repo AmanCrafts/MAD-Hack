@@ -4,7 +4,7 @@ SkillBites is a micro-learning mobile app designed to deliver short lessons with
 
 ---
 
-## 📘 Features
+## Features
 
 ### 1. Content
 - Topics include:
@@ -29,11 +29,11 @@ SkillBites is a micro-learning mobile app designed to deliver short lessons with
 
 ### 3. Learner Experience
 
-#### 🔍 Browse & Search
+#### Browse & Search
 - Browse topics by **category** and **difficulty**
 - Search topics using keywords from title/description
 
-#### 📊 Progress & Tracking
+#### Progress & Tracking
 - Track topic status:
   - Not Started  
   - In Progress  
@@ -55,7 +55,7 @@ SkillBites is a micro-learning mobile app designed to deliver short lessons with
 
 ---
 
-## 🏗️ Suggested Tech Stack
+## Suggested Tech Stack
 - React Native (Expo or CLI)
 - JavaScript
 - AsyncStorage / SQLite / MMKV for local data
@@ -63,4 +63,4 @@ SkillBites is a micro-learning mobile app designed to deliver short lessons with
 
 ---
 
-## 📂 Suggested Folder Structure
+## Suggested Folder Structure
