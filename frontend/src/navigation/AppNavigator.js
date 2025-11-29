@@ -118,7 +118,6 @@ const TabNavigator = () => {
 
       {/* DASHBOARD TAB */}
       <Tab.Screen
-<<<<<<< HEAD
         name="Dashboard"
         component={DashboardScreen}
         options={{
@@ -153,8 +152,6 @@ const TabNavigator = () => {
 
       {/* BOOKMARKS TAB */}
       <Tab.Screen
-=======
->>>>>>> 44bd0cd080b0debcc7fdb32bba72f3ff72da0d24
         name="Bookmarks"
         component={BookmarksScreen}
         options={{
