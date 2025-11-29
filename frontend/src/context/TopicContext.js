@@ -1,18 +1,17 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { demoTopics } from '../data/demoData';
-import { 
-  getTopicStatus, 
-  getBookmarks, 
-  getStreak, 
-  saveTopicStatus, 
-  saveBookmark, 
-  removeBookmark, 
-  updateStreak 
+import {
+  getTopicStatus,
+  getBookmarks,
+  getStreak,
+  saveTopicStatus,
+  saveBookmark,
+  removeBookmark,
+  updateStreak
 } from '../utils/storage';
 
 const TopicContext = createContext();
 
-// Action types
 const ACTIONS = {
   SET_TOPICS: 'SET_TOPICS',
   SET_TOPIC_STATUS: 'SET_TOPIC_STATUS',
@@ -21,18 +20,18 @@ const ACTIONS = {
   UPDATE_TOPIC_STATUS: 'UPDATE_TOPIC_STATUS',
   TOGGLE_BOOKMARK: 'TOGGLE_BOOKMARK',
   SET_LOADING: 'SET_LOADING',
+  SET_ERROR: 'SET_ERROR',
 };
 
-// Initial state
 const initialState = {
   topics: demoTopics,
-  topicStatus: {}, // { topicId: 'not_started' | 'in_progress' | 'completed' }
+  topicStatus: {},
   bookmarks: [],
   streak: 0,
   loading: true,
+  error: null,
 };
 
-// Reducer
 const topicReducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.SET_TOPICS:
@@ -58,16 +57,16 @@ const topicReducer = (state, action) => {
       };
     case ACTIONS.SET_LOADING:
       return { ...state, loading: action.payload };
+    case ACTIONS.SET_ERROR:
+      return { ...state, error: action.payload };
     default:
       return state;
   }
 };
 
-// Provider component
 export const TopicProvider = ({ children }) => {
   const [state, dispatch] = useReducer(topicReducer, initialState);
 
-  // Load data on mount
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -85,28 +84,27 @@ export const TopicProvider = ({ children }) => {
       dispatch({ type: ACTIONS.SET_STREAK, payload: streak });
     } catch (error) {
       console.error('Error loading initial data:', error);
+      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Failed to load data. Please try again.' });
     } finally {
       dispatch({ type: ACTIONS.SET_LOADING, payload: false });
     }
   };
 
-  // Update topic status
   const updateTopicStatus = async (topicId, status) => {
     try {
       await saveTopicStatus(topicId, status);
       dispatch({ type: ACTIONS.UPDATE_TOPIC_STATUS, payload: { topicId, status } });
-      
-      // Update streak if topic is completed
+
       if (status === 'completed') {
         const newStreak = await updateStreak();
         dispatch({ type: ACTIONS.SET_STREAK, payload: newStreak });
       }
     } catch (error) {
       console.error('Error updating topic status:', error);
+      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Failed to update progress.' });
     }
   };
 
-  // Toggle bookmark
   const toggleBookmark = async (topicId) => {
     try {
       const isBookmarked = state.bookmarks.includes(topicId);
@@ -118,37 +116,32 @@ export const TopicProvider = ({ children }) => {
       dispatch({ type: ACTIONS.TOGGLE_BOOKMARK, payload: topicId });
     } catch (error) {
       console.error('Error toggling bookmark:', error);
+      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Failed to update bookmark.' });
     }
   };
 
-  // Get topic by ID
   const getTopicById = (topicId) => {
     return state.topics.find(topic => topic.id === topicId);
   };
 
-  // Get topics by category
   const getTopicsByCategory = (category) => {
     if (category === 'All') return state.topics;
     return state.topics.filter(topic => topic.category === category);
   };
 
-  // Get topics by difficulty
   const getTopicsByDifficulty = (difficulty) => {
     if (difficulty === 'All') return state.topics;
     return state.topics.filter(topic => topic.difficulty === difficulty);
   };
 
-  // Get completed topics count
   const getCompletedTopicsCount = () => {
     return Object.values(state.topicStatus).filter(status => status === 'completed').length;
   };
 
-  // Get bookmarked topics
   const getBookmarkedTopics = () => {
     return state.topics.filter(topic => state.bookmarks.includes(topic.id));
   };
 
-  // Search topics
   const searchTopics = (query) => {
     const lowercaseQuery = query.toLowerCase();
     return state.topics.filter(topic =>
@@ -167,6 +160,7 @@ export const TopicProvider = ({ children }) => {
     getCompletedTopicsCount,
     getBookmarkedTopics,
     searchTopics,
+    clearError: () => dispatch({ type: ACTIONS.SET_ERROR, payload: null }),
   };
 
   return (
@@ -176,7 +170,6 @@ export const TopicProvider = ({ children }) => {
   );
 };
 
-// Custom hook
 export const useTopics = () => {
   const context = useContext(TopicContext);
   if (!context) {
